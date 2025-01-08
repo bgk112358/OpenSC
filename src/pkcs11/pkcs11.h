@@ -818,6 +818,19 @@ typedef unsigned long ck_mechanism_type_t;
 #define CKM_HKDF_DATA			(0x402BUL)
 #define CKM_HKDF_KEY_GEN		(0x402CUL)
 
+// bgk add
+#define CKM_SM2_KEY_PAIR_GEN    0x80000101
+#define CKM_SM2                 0x80000102
+#define CKM_SM2_ENCRYPT  0x80000103
+
+#define CKM_SM3                 0x80000201
+#define CKM_SM3_HMAC            0x80000202
+
+#define CKM_SM4_KEY_PAIR_GEN    0x80000301
+#define CKM_SM4_ECB             0x80000302
+#define CKM_SM4_CBC             0x80000303
+// bgk add end
+
 #define CKM_VENDOR_DEFINED		(1UL << 31)
 
 struct ck_mechanism

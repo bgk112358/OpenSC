@@ -6089,10 +6089,10 @@ get_mechanisms(CK_SLOT_ID slot, CK_MECHANISM_TYPE_PTR *pList, CK_FLAGS flags)
 	if (rv != CKR_OK)
 		p11_fatal("C_GetMechanismList", rv);
 
+	printf("[bgk][opensc] get_mechanismsm, flags = %ld, ulCount = %ld \n", flags, ulCount);
 	if (flags != (CK_FLAGS)-1) {
 		CK_MECHANISM_TYPE *mechs = *pList;
 		CK_MECHANISM_INFO info;
-
 		for (m = n = 0; n < ulCount; n++) {
 			rv = p11->C_GetMechanismInfo(slot, mechs[n], &info);
 			if (rv != CKR_OK)
@@ -9173,6 +9173,14 @@ static struct mech_info	p11_mechanisms[] = {
 	{ CKM_X9_42_DH_PARAMETER_GEN,"X9-42-DH-PARAMETER-GEN", NULL, MF_UNKNOWN },
 	{ CKM_AES_KEY_WRAP,	"AES-KEY-WRAP", NULL, MF_UNKNOWN },
 	{ CKM_AES_KEY_WRAP_PAD,	"AES-KEY-WRAP-PAD", NULL, MF_UNKNOWN},
+	{ CKM_SM2_KEY_PAIR_GEN,	"SM2-KEY-PAIR-GEN", NULL, MF_UNKNOWN},
+	{ CKM_SM2,	"SM2", NULL, MF_UNKNOWN},
+	{ CKM_SM2_ENCRYPT,	"SM2-ENCRYPT", NULL, MF_UNKNOWN},
+	{ CKM_SM3,	"SM3", NULL, MF_UNKNOWN},
+	{ CKM_SM3_HMAC,	"SM3_HMAC", NULL, MF_UNKNOWN},
+	{ CKM_SM4_KEY_PAIR_GEN,	"SM4_KEY_PAIR_GEN", NULL, MF_UNKNOWN},
+	{ CKM_SM4_ECB,	"SM4_ECB", NULL, MF_UNKNOWN},
+	{ CKM_SM4_CBC,	"SM4_CBC", NULL, MF_UNKNOWN},
 	{ 0, NULL, NULL, MF_UNKNOWN },
 };
 
