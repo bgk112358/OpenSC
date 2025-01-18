@@ -3451,6 +3451,25 @@ gen_key(CK_SLOT_ID slot, CK_SESSION_HANDLE session, CK_OBJECT_HANDLE *hSecretKey
 			FILL_ATTR(keyTemplate[n_attr], CKA_KEY_TYPE, &key_type, sizeof(key_type));
 			n_attr++;
 		}
+		else if (strncasecmp(type, "SM4", strlen("SM4")) == 0) {
+			CK_MECHANISM_TYPE mtypes[] = {CKM_SM4_KEY_GEN};
+			size_t mtypes_num = sizeof(mtypes)/sizeof(mtypes[0]);
+			// const char *size = type + strlen("SM4");
+
+			key_type = CKK_SM4;
+
+			if (!opt_mechanism_used)
+				if (!find_mechanism(slot, CKF_GENERATE, mtypes, mtypes_num, &opt_mechanism))
+					util_fatal("Generate Key mechanism not supported\n");
+
+			key_length = 16;
+			// key_length = (unsigned long)atol(size);
+			// if (key_length == 0)
+			// 	util_fatal("Unknown key type %s, expecting SM4:<nbytes>", type);
+
+			FILL_ATTR(keyTemplate[n_attr], CKA_KEY_TYPE, &key_type, sizeof(key_type));
+			n_attr++;
+		}
 		else if (strncasecmp(type, "DES:", strlen("DES:")) == 0) {
 			CK_MECHANISM_TYPE mtypes[] = {CKM_DES_KEY_GEN};
 			size_t mtypes_num = sizeof(mtypes)/sizeof(mtypes[0]);
@@ -9178,7 +9197,7 @@ static struct mech_info	p11_mechanisms[] = {
 	{ CKM_SM2_ENCRYPT,	"SM2-ENCRYPT", NULL, MF_UNKNOWN},
 	{ CKM_SM3,	"SM3", NULL, MF_UNKNOWN},
 	{ CKM_SM3_HMAC,	"SM3_HMAC", NULL, MF_UNKNOWN},
-	{ CKM_SM4_KEY_PAIR_GEN,	"SM4_KEY_PAIR_GEN", NULL, MF_UNKNOWN},
+	{ CKM_SM4_KEY_GEN,	"SM4_KEY_GEN", NULL, MF_UNKNOWN},
 	{ CKM_SM4_ECB,	"SM4_ECB", NULL, MF_UNKNOWN},
 	{ CKM_SM4_CBC,	"SM4_CBC", NULL, MF_UNKNOWN},
 	{ 0, NULL, NULL, MF_UNKNOWN },
