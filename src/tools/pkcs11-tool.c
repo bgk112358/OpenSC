@@ -2832,6 +2832,16 @@ static void decrypt_data(CK_SLOT_ID slot, CK_SESSION_HANDLE session,
 		mech.pParameter = &gcm_params;
 		mech.ulParameterLen = sizeof(gcm_params);
 		break;
+	case CKM_SM4_ECB:
+		mech.pParameter = NULL;
+		mech.ulParameterLen = 0;
+		break;
+	case CKM_SM4_CBC:
+		iv_size = 16;
+		iv = hex_string_to_byte_array(opt_iv, &iv_size, "IV");
+		mech.pParameter = iv;
+		mech.ulParameterLen = iv_size;
+		break;
 	default:
 		util_fatal("Mechanism %s illegal or not supported\n", p11_mechanism_to_name(opt_mechanism));
 	}
@@ -2954,6 +2964,16 @@ static void encrypt_data(CK_SLOT_ID slot, CK_SESSION_HANDLE session,
 		gcm_params.ulTagBits = opt_tag_bits;
 		mech.pParameter = &gcm_params;
 		mech.ulParameterLen = sizeof(gcm_params);
+		break;
+	case CKM_SM4_ECB:
+		mech.pParameter = NULL;
+		mech.ulParameterLen = 0;
+		break;
+	case CKM_SM4_CBC:
+		iv_size = 16;
+		iv = hex_string_to_byte_array(opt_iv, &iv_size, "IV");
+		mech.pParameter = iv;
+		mech.ulParameterLen = iv_size;
 		break;
 	default:
 		util_fatal("Mechanism %s illegal or not supported\n", p11_mechanism_to_name(opt_mechanism));
@@ -8860,13 +8880,13 @@ static void p11_fatal(const char *func, CK_RV rv)
 	if (module)
 		C_UnloadModule(module);
 
-	util_fatal("PKCS11 function %s failed: rv = %s (0x%0x)", func, CKR2Str(rv), (unsigned int) rv);
+	util_fatal("PKCS11 function fatal %s failed: rv = %s (0x%0x)", func, CKR2Str(rv), (unsigned int) rv);
 }
 
 static void p11_warn(const char *func, CK_RV rv)
 {
 	if (!suppress_warn)
-		util_warn("PKCS11 function %s failed: rv = %s (0x%0x)\n", func, CKR2Str(rv), (unsigned int) rv);
+		util_warn("PKCS11 function warn %s failed: rv = %s (0x%0x)\n", func, CKR2Str(rv), (unsigned int) rv);
 }
 
 static void p11_perror(const char *msg, CK_RV rv)
